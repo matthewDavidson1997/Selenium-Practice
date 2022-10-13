@@ -1,0 +1,113 @@
+from enum import auto
+from urllib import response
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+import time
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.support.ui import Select
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import ElementClickInterceptedException
+from selenium.webdriver.common import desired_capabilities
+from seleniumwire import webdriver
+import json
+import postpy2
+
+target_url = ""
+
+
+
+options = webdriver.ChromeOptions()
+options.add_argument("auto-open-devtools-for-tabs")
+options.add_argument("start-maximised")
+options.add_experimental_option("detach", True)
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+driver.get(target_url)
+driver.maximize_window()
+
+location_element_id = "location"
+search_button_class_name = "btn.btn-primary.m-0"
+pop_up_close_button_class_name = "fancybox-item.fancybox-close"
+loading_backdrop_class_name = "backdrop"
+
+location_element_by_id = (By.ID, location_element_id)
+search_button_by_class_name = (By.CLASS_NAME, search_button_class_name)
+pop_up_close_button_by_class_name = (By.CLASS_NAME, pop_up_close_button_class_name)
+loading_backdrop_by_class_name = (By.CLASS_NAME, loading_backdrop_class_name)
+
+#find_location_element = driver.find_element(*location_element_by_id)
+#select_location_element = Select(find_location_element)
+#options = select_location_element.options
+
+def find_element(*element_to_find):
+    found_element = driver.find_element(*element_to_find)
+    return found_element
+
+def select_element(element_to_select):
+    selected_element = Select(element_to_select)
+    return selected_element
+
+def wait_for_element_to_appear(length, element):
+    WebDriverWait(driver, length).until(EC.presence_of_element_located(element))
+
+def wait_for_element_to_disappear(length, element):
+    WebDriverWait(driver, length).until_not(EC.presence_of_element_located(element))
+
+def check_for_loading_screen():
+    try:
+        wait_for_element_to_disappear(10, loading_backdrop_by_class_name)
+    except NoSuchElementException:
+        pass
+
+def close_pop_up():
+    try:
+        find_element(*pop_up_close_button_by_class_name).click()
+    except NoSuchElementException:
+        pass
+
+def iterate_through_location_list():
+    # For each country in location list the following steps will be performed
+
+    location_count = Select(find_element(*location_element_by_id)).options
+    for index in range(0, len(location_count)):
+        # Wait for the location element to appear
+        wait_for_element_to_appear(length=10, element=location_element_by_id)
+        # Select the location element based on the index number
+        select_element(find_element(*location_element_by_id)).select_by_index(index)
+        # Wait for the search button to appear
+        wait_for_element_to_appear(length=30, element=search_button_by_class_name)
+
+        # Attempt to click the search button 
+        # Set status of click to false
+        clicked = False
+
+        # While the search button remains unclicked check for a loading screen or a pop up and deal with them
+        while clicked == False:
+            try:
+                find_element(*search_button_by_class_name).click()
+                clicked = True
+                get_network_requests()
+                break
+            # If the click is intercepted by either the loading screen or pop up these are dealt with
+            except ElementClickInterceptedException:
+                check_for_loading_screen()
+                close_pop_up()
+
+def get_network_requests():
+    for request in driver.requests:
+        if request.response:
+            print(
+                request.url,
+                request.response.status_code,
+                request.headers,
+                request.response.headers
+                
+            )
+
+if __name__ == '__main__':
+    iterate_through_location_list()
+
+    
