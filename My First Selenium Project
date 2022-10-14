@@ -9,10 +9,11 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import ElementClickInterceptedException
 from seleniumwire import webdriver
 from seleniumwire.utils import decode
+import pandas as pd
+import json
+import requests
 
 target_url = "https://www.cambridgeenglish.org/find-a-centre/find-an-exam-centre/"
-
-
 
 options = webdriver.ChromeOptions()
 options.add_argument("auto-open-devtools-for-tabs")
@@ -22,27 +23,18 @@ driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), opti
 driver.get(target_url)
 driver.maximize_window()
 
-location_element_id = "location"
-search_button_class_name = "btn.btn-primary.m-0"
-pop_up_close_button_class_name = "fancybox-item.fancybox-close"
-loading_backdrop_class_name = "backdrop"
+# Elements we want to interact with and how to find them
+location_element_by_id = (By.ID, "location")
+search_button_by_class_name = (By.CLASS_NAME, "btn.btn-primary.m-0")
+pop_up_close_button_by_class_name = (By.CLASS_NAME, "fancybox-item.fancybox-close")
+loading_backdrop_by_class_name = (By.CLASS_NAME, "backdrop")
 
-location_element_by_id = (By.ID, location_element_id)
-search_button_by_class_name = (By.CLASS_NAME, search_button_class_name)
-pop_up_close_button_by_class_name = (By.CLASS_NAME, pop_up_close_button_class_name)
-loading_backdrop_by_class_name = (By.CLASS_NAME, loading_backdrop_class_name)
-
-#find_location_element = driver.find_element(*location_element_by_id)
-#select_location_element = Select(find_location_element)
-#options = select_location_element.options
-
+# Find an element 
 def find_element(*element_to_find):
-    found_element = driver.find_element(*element_to_find)
-    return found_element
+    return (driver.find_element(*element_to_find))
 
 def select_element(element_to_select):
-    selected_element = Select(element_to_select)
-    return selected_element
+    return Select(element_to_select)
 
 def wait_for_element_to_appear(length, element):
     WebDriverWait(driver, length).until(EC.presence_of_element_located(element))
@@ -65,8 +57,8 @@ def close_pop_up():
 def iterate_through_location_list():
     # For each country in location list the following steps will be performed
 
-    location_count = Select(find_element(*location_element_by_id)).options
-    for index in range(0, len(location_count)):
+    location_count = len(Select(find_element(*location_element_by_id)).options)
+    for index in range(21, 24):
         # Wait for the location element to appear
         wait_for_element_to_appear(length=10, element=location_element_by_id)
         # Select the location element based on the index number
@@ -83,21 +75,25 @@ def iterate_through_location_list():
             try:
                 find_element(*search_button_by_class_name).click()
                 clicked = True
-                get_network_requests()
                 break
             # If the click is intercepted by either the loading screen or pop up these are dealt with
             except ElementClickInterceptedException:
                 check_for_loading_screen()
                 close_pop_up()
 
-def get_network_requests():
+def get_network_responses():
     for request in driver.requests:
-        if request.url == "https://apis.cambridgeassessment.org.uk/ce/v1/find-a-centre/centres":
+        if request.url == "https://apis.cambridgeassessment.org.uk/ce/v1/find-a-centre/centres" and request.headers. !=:
             response = decode(request.response.body, request.response.headers.get('Content-Encoding', 'identity'))
             response = response.decode("utf8")
-            print(response)
+            json_data = json.loads(response)
+            response_as_dataframe = pd.json_normalize(json_data, errors='ignore')
+            print(response_as_dataframe)
+            response_as_dataframe = response_as_dataframe[['CentreId', 'Name', 'Longitude', 'Latitude']]
+            print(response_as_dataframe)
 
 if __name__ == '__main__':
     iterate_through_location_list()
+    get_network_responses()
 
     
