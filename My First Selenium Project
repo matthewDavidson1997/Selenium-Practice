@@ -1,9 +1,5 @@
-from enum import auto
-from urllib import response
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-import time
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.ui import Select
@@ -11,12 +7,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import ElementClickInterceptedException
-from selenium.webdriver.common import desired_capabilities
 from seleniumwire import webdriver
-import json
-import postpy2
+from seleniumwire.utils import decode
 
-target_url = ""
+target_url = "https://www.cambridgeenglish.org/find-a-centre/find-an-exam-centre/"
 
 
 
@@ -98,14 +92,10 @@ def iterate_through_location_list():
 
 def get_network_requests():
     for request in driver.requests:
-        if request.response:
-            print(
-                request.url,
-                request.response.status_code,
-                request.headers,
-                request.response.headers
-                
-            )
+        if request.url == "https://apis.cambridgeassessment.org.uk/ce/v1/find-a-centre/centres":
+            response = decode(request.response.body, request.response.headers.get('Content-Encoding', 'identity'))
+            response = response.decode("utf8")
+            print(response)
 
 if __name__ == '__main__':
     iterate_through_location_list()
