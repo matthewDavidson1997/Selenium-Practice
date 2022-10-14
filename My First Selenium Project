@@ -58,7 +58,7 @@ def iterate_through_location_list():
     # For each country in location list the following steps will be performed
 
     location_count = len(Select(find_element(*location_element_by_id)).options)
-    for index in range(0, 5):
+    for index in range(0, location_count):
         # Wait for the location element to appear
         wait_for_element_to_appear(length=10, element=location_element_by_id)
         # Select the location element based on the index number
@@ -94,7 +94,7 @@ def get_network_responses():
             final_dataframe.append(response_as_dataframe)
 
     final_dataframe = pd.concat(final_dataframe)
-    final_dataframe.to_csv(filepath)
+    final_dataframe.to_csv(filepath, index=False)
     print(final_dataframe)
 
 if __name__ == '__main__':
