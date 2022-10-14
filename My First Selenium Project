@@ -83,7 +83,7 @@ def iterate_through_location_list():
 
 def get_network_responses():
     for request in driver.requests:
-        if request.url == "https://apis.cambridgeassessment.org.uk/ce/v1/find-a-centre/centres" and request.headers. !=:
+        if request.url == "https://apis.cambridgeassessment.org.uk/ce/v1/find-a-centre/centres":
             response = decode(request.response.body, request.response.headers.get('Content-Encoding', 'identity'))
             response = response.decode("utf8")
             json_data = json.loads(response)
