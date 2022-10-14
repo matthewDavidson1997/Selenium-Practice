@@ -20,8 +20,7 @@ options.add_argument("auto-open-devtools-for-tabs")
 options.add_argument("start-maximised")
 options.add_experimental_option("detach", True)
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-driver.get(target_url)
-driver.maximize_window()
+
 
 # Elements we want to interact with and how to find them
 location_element_by_id = (By.ID, "location")
@@ -44,7 +43,7 @@ def wait_for_element_to_disappear(length, element):
 
 def check_for_loading_screen():
     try:
-        wait_for_element_to_disappear(10, loading_backdrop_by_class_name)
+        wait_for_element_to_disappear(20, loading_backdrop_by_class_name)
     except NoSuchElementException:
         pass
 
@@ -58,7 +57,7 @@ def iterate_through_location_list():
     # For each country in location list the following steps will be performed
 
     location_count = len(Select(find_element(*location_element_by_id)).options)
-    for index in range(21, 24):
+    for index in range(0, location_count):
         # Wait for the location element to appear
         wait_for_element_to_appear(length=10, element=location_element_by_id)
         # Select the location element based on the index number
@@ -82,17 +81,23 @@ def iterate_through_location_list():
                 close_pop_up()
 
 def get_network_responses():
+
+    final_dataframe = []
     for request in driver.requests:
-        if request.url == "https://apis.cambridgeassessment.org.uk/ce/v1/find-a-centre/centres":
+        if request.url == "https://apis.cambridgeassessment.org.uk/ce/v1/find-a-centre/centres" and request.response.status_code != 500:
             response = decode(request.response.body, request.response.headers.get('Content-Encoding', 'identity'))
             response = response.decode("utf8")
             json_data = json.loads(response)
             response_as_dataframe = pd.json_normalize(json_data, errors='ignore')
-            print(response_as_dataframe)
             response_as_dataframe = response_as_dataframe[['CentreId', 'Name', 'Longitude', 'Latitude']]
-            print(response_as_dataframe)
+            final_dataframe.append(response_as_dataframe)
+
+    final_dataframe = pd.concat(final_dataframe)
+    print(final_dataframe)
 
 if __name__ == '__main__':
+    driver.get(target_url)
+    driver.maximize_window()
     iterate_through_location_list()
     get_network_responses()
 
