@@ -16,13 +16,13 @@ import requests
 
 
 TARGET_URL = "https://www.cambridgeenglish.org/find-a-centre/find-an-exam-centre/"
+OUTFILE = Path("Centre_Locations.csv")
 
 options = webdriver.ChromeOptions()
 options.add_argument("auto-open-devtools-for-tabs")
 options.add_argument("start-maximised")
 options.add_experimental_option("detach", True)
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-filepath = Path("Z:/Personal/Selenium Practice/Centre_Locations.csv")
 
 # Elements we want to interact with and how to find them
 location_element_by_id = (By.ID, "location")
@@ -95,7 +95,7 @@ def get_network_responses():
             final_dataframe.append(response_as_dataframe)
 
     final_dataframe = pd.concat(final_dataframe)
-    final_dataframe.to_csv(filepath, index=False)
+    final_dataframe.to_csv(OUTFILE, index=False)
     print(final_dataframe)
 
 if __name__ == '__main__':
