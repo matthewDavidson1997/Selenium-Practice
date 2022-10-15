@@ -30,18 +30,17 @@ SEARCH_BUTTON = (By.CLASS_NAME, "btn.btn-primary.m-0")
 POP_UP_CLOSE_BUTTON = (By.CLASS_NAME, "fancybox-item.fancybox-close")
 LOADING_BACKDROP = (By.CLASS_NAME, "backdrop")
 
-
-def wait_for_element_to_appear(driver, element, timeout=10):
+def wait_for_element_to_appear(driver, element, timeout=30):
     return WebDriverWait(driver, timeout).until(EC.presence_of_element_located(element))
 
 
-def wait_for_element_to_disappear(driver, element, timeout=10):
+def wait_for_element_to_disappear(driver, element, timeout=30):
     WebDriverWait(driver, timeout).until_not(EC.presence_of_element_located(element))
 
 
 def check_for_loading_screen(driver):
     try:
-        wait_for_element_to_disappear(driver, LOADING_BACKDROP, 20)
+        wait_for_element_to_disappear(driver, LOADING_BACKDROP, 30)
     except NoSuchElementException:
         pass
 
