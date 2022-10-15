@@ -22,10 +22,10 @@ options.add_experimental_option("detach", True)
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
 # Elements we want to interact with and how to find them
-location_element_by_id = (By.ID, "location")
-search_button_by_class_name = (By.CLASS_NAME, "btn.btn-primary.m-0")
-pop_up_close_button_by_class_name = (By.CLASS_NAME, "fancybox-item.fancybox-close")
-loading_backdrop_by_class_name = (By.CLASS_NAME, "backdrop")
+LOCATION_DROPDOWN = (By.ID, "location")
+SEARCH_BUTTON = (By.CLASS_NAME, "btn.btn-primary.m-0")
+POP_UP_CLOSE_BUTTON = (By.CLASS_NAME, "fancybox-item.fancybox-close")
+LOADING_BACKDROP = (By.CLASS_NAME, "backdrop")
 
 
 def wait_for_element_to_appear(driver, element, timeout=10):
