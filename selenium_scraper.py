@@ -14,7 +14,8 @@ import pandas as pd
 import json
 import requests
 
-target_url = "https://www.cambridgeenglish.org/find-a-centre/find-an-exam-centre/"
+
+TARGET_URL = "https://www.cambridgeenglish.org/find-a-centre/find-an-exam-centre/"
 
 options = webdriver.ChromeOptions()
 options.add_argument("auto-open-devtools-for-tabs")
@@ -98,7 +99,7 @@ def get_network_responses():
     print(final_dataframe)
 
 if __name__ == '__main__':
-    driver.get(target_url)
+    driver.get(TARGET_URL)
     driver.maximize_window()
     iterate_through_location_list()
     get_network_responses()
