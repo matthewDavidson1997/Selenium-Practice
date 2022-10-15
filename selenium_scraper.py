@@ -28,9 +28,6 @@ pop_up_close_button_by_class_name = (By.CLASS_NAME, "fancybox-item.fancybox-clos
 loading_backdrop_by_class_name = (By.CLASS_NAME, "backdrop")
 
 
-# Find an element 
-def find_element(*element_to_find):
-    return (driver.find_element(*element_to_find))
 
 
 def select_element(element_to_select):
