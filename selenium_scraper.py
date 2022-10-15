@@ -39,24 +39,16 @@ def wait_for_element_to_disappear(driver, element, timeout=10):
     WebDriverWait(driver, timeout).until_not(EC.presence_of_element_located(element))
 
 
-def wait_for_element_to_appear(length, element):
-    WebDriverWait(driver, length).until(EC.presence_of_element_located(element))
-
-
-def wait_for_element_to_disappear(length, element):
-    WebDriverWait(driver, length).until_not(EC.presence_of_element_located(element))
-
-
-def check_for_loading_screen():
+def check_for_loading_screen(driver):
     try:
-        wait_for_element_to_disappear(20, loading_backdrop_by_class_name)
+        wait_for_element_to_disappear(driver, LOADING_BACKDROP, 20)
     except NoSuchElementException:
         pass
 
 
-def close_pop_up():
+def close_pop_up(driver):
     try:
-        find_element(*pop_up_close_button_by_class_name).click()
+        driver.find_element(*POP_UP_CLOSE_BUTTON).click()
     except NoSuchElementException:
         pass
 
@@ -86,8 +78,8 @@ def iterate_through_location_list():
 
             # If the click is intercepted by either the loading screen or pop up these are dealt with
             except ElementClickInterceptedException:
-                check_for_loading_screen()
-                close_pop_up()
+                check_for_loading_screen(driver)
+                close_pop_up(driver)
 
 
 def get_network_responses(outfile):
