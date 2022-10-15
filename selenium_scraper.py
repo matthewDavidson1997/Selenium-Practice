@@ -35,6 +35,8 @@ def wait_for_element_to_appear(driver, element, timeout=10):
     return WebDriverWait(driver, timeout).until(EC.presence_of_element_located(element))
 
 
+def wait_for_element_to_disappear(driver, element, timeout=10):
+    WebDriverWait(driver, timeout).until_not(EC.presence_of_element_located(element))
 
 
 def wait_for_element_to_appear(length, element):
