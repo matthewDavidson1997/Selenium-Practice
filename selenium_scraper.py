@@ -72,7 +72,7 @@ def iterate_through_location_list():
         clicked = False
 
         # While the search button remains unclicked check for a loading screen or a pop up and deal with them
-        while clicked == False:
+        while not clicked:
             try:
                 find_element(*search_button_by_class_name).click()
                 clicked = True
