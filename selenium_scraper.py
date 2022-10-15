@@ -16,7 +16,6 @@ import requests
 
 
 TARGET_URL = "https://www.cambridgeenglish.org/find-a-centre/find-an-exam-centre/"
-OUTFILE = Path("Centre_Locations.csv")
 
 options = webdriver.ChromeOptions()
 options.add_argument("auto-open-devtools-for-tabs")
@@ -90,7 +89,7 @@ def iterate_through_location_list():
                 close_pop_up()
 
 
-def get_network_responses():
+def get_network_responses(outfile):
 
     final_dataframe = []
     for request in driver.requests:
@@ -103,7 +102,7 @@ def get_network_responses():
             final_dataframe.append(response_as_dataframe)
 
     final_dataframe = pd.concat(final_dataframe)
-    final_dataframe.to_csv(OUTFILE, index=False)
+    final_dataframe.to_csv(outfile, index=False)
     print(final_dataframe)
 
 
@@ -111,4 +110,4 @@ if __name__ == '__main__':
     driver.get(TARGET_URL)
     driver.maximize_window()
     iterate_through_location_list()
-    get_network_responses()
+    get_network_responses(outfile=Path("Centre_Locations.csv"))
