@@ -93,7 +93,8 @@ def get_network_responses(outfile):
 
     final_dataframe = []
     for request in driver.requests:
-        if request.url == "https://apis.cambridgeassessment.org.uk/ce/v1/find-a-centre/centres" and request.response.status_code != 500:
+        if request.url == "https://apis.cambridgeassessment.org.uk/ce/v1/find-a-centre/centres" \
+                and request.response.status_code != 500:
             response = decode(request.response.body, request.response.headers.get('Content-Encoding', 'identity'))
             response = response.decode("utf8")
             json_data = json.loads(response)
