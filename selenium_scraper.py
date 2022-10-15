@@ -30,8 +30,6 @@ loading_backdrop_by_class_name = (By.CLASS_NAME, "backdrop")
 
 
 
-def select_element(element_to_select):
-    return Select(element_to_select)
 
 
 def wait_for_element_to_appear(length, element):
