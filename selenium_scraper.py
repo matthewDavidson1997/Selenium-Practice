@@ -76,7 +76,7 @@ def iterate_through_location_list():
             try:
                 find_element(*search_button_by_class_name).click()
                 clicked = True
-                break
+
             # If the click is intercepted by either the loading screen or pop up these are dealt with
             except ElementClickInterceptedException:
                 check_for_loading_screen()
