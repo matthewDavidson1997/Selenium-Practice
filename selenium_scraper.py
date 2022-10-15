@@ -28,6 +28,8 @@ pop_up_close_button_by_class_name = (By.CLASS_NAME, "fancybox-item.fancybox-clos
 loading_backdrop_by_class_name = (By.CLASS_NAME, "backdrop")
 
 
+def wait_for_element_to_appear(driver, element, timeout=10):
+    return WebDriverWait(driver, timeout).until(EC.presence_of_element_located(element))
 
 
 
