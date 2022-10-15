@@ -11,7 +11,6 @@ from seleniumwire import webdriver
 from seleniumwire.utils import decode
 import pandas as pd
 import json
-import requests
 
 
 TARGET_URL = "https://www.cambridgeenglish.org/find-a-centre/find-an-exam-centre/"
@@ -64,6 +63,7 @@ def iterate_through_location_list():
     # For each country in location list the following steps will be performed
 
     location_count = len(Select(find_element(*location_element_by_id)).options)
+    location_count = 2
     for index in range(0, location_count):
         # Wait for the location element to appear
         wait_for_element_to_appear(length=10, element=location_element_by_id)
