@@ -30,18 +30,23 @@ search_button_by_class_name = (By.CLASS_NAME, "btn.btn-primary.m-0")
 pop_up_close_button_by_class_name = (By.CLASS_NAME, "fancybox-item.fancybox-close")
 loading_backdrop_by_class_name = (By.CLASS_NAME, "backdrop")
 
+
 # Find an element 
 def find_element(*element_to_find):
     return (driver.find_element(*element_to_find))
 
+
 def select_element(element_to_select):
     return Select(element_to_select)
+
 
 def wait_for_element_to_appear(length, element):
     WebDriverWait(driver, length).until(EC.presence_of_element_located(element))
 
+
 def wait_for_element_to_disappear(length, element):
     WebDriverWait(driver, length).until_not(EC.presence_of_element_located(element))
+
 
 def check_for_loading_screen():
     try:
@@ -49,11 +54,13 @@ def check_for_loading_screen():
     except NoSuchElementException:
         pass
 
+
 def close_pop_up():
     try:
         find_element(*pop_up_close_button_by_class_name).click()
     except NoSuchElementException:
         pass
+
 
 def iterate_through_location_list():
     # For each country in location list the following steps will be performed
@@ -82,6 +89,7 @@ def iterate_through_location_list():
                 check_for_loading_screen()
                 close_pop_up()
 
+
 def get_network_responses():
 
     final_dataframe = []
@@ -98,11 +106,9 @@ def get_network_responses():
     final_dataframe.to_csv(OUTFILE, index=False)
     print(final_dataframe)
 
+
 if __name__ == '__main__':
     driver.get(TARGET_URL)
     driver.maximize_window()
     iterate_through_location_list()
     get_network_responses()
-    
-
-    
