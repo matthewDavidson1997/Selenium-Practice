@@ -19,7 +19,10 @@ options = webdriver.ChromeOptions()
 options.add_argument("auto-open-devtools-for-tabs")
 options.add_argument("start-maximised")
 options.add_experimental_option("detach", True)
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+driver = webdriver.Chrome(
+    service=Service(ChromeDriverManager().install()),
+    options=options
+)
 
 # Elements we want to interact with and how to find them
 LOCATION_DROPDOWN = (By.ID, "location")
