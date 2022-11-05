@@ -1,4 +1,4 @@
-# Selenium Practice
+# Selenium Practise
 
 ## About
 
