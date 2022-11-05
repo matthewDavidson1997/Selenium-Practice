@@ -1,5 +1,9 @@
 # Selenium Practice
 
+## About
+
+Python program that uses Selenium to automate the retrieval of json files from network responses.
+
 ## Setup
 
 ```shell
