@@ -4,6 +4,8 @@
 
 Python program that uses Selenium to automate the retrieval of json files from network responses.
 
+Responses are added to a pandas DataFrame and finally outputted as a .csv file.
+
 ## Setup
 
 ```shell
